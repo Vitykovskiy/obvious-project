@@ -1,5 +1,4 @@
 <template>
-
   <div class="settings-page">
     <navigation-panel></navigation-panel>
     <div class="setting">

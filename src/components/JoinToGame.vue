@@ -2,10 +2,9 @@
   <div class="content-container">
     <navigation-panel></navigation-panel>
     <div class="join-game-panel">
-      <input v-model="gameId" placeholder="Введите ID комнаты">
+      <input v-model="gameId" placeholder="Введите ID комнаты" />
       <button @click="joinGame">Присоединиться</button>
     </div>
-
   </div>
 </template>
 
@@ -13,13 +12,11 @@
 import { ref } from 'vue'
 import NavigationPanel from '@/components/interface/NavigationPanel.vue'
 
-const gameId = ref('');
+const gameId = ref('')
 
 function joinGame(): void {
-  console.log('Вы присоединились к игре', gameId.value);
+  console.log('Вы присоединились к игре', gameId.value)
 }
-
-
 </script>
 
 <style scoped>
