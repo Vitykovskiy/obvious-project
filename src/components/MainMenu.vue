@@ -1,17 +1,17 @@
 <template>
-  <div class="content-container">
+  <div v-show="allCardsAreLoaded" class="main-menu-wrapper">
     <h1>Очевидно — и точка</h1>
     <h2>Карточная игра с использованием нейросети</h2>
     <div class="menu-container">
-      <menu-button title="СОЗДАТЬ ИГРУ" width="100%"></menu-button>
-      <menu-button title="ПОДКЛЮЧИТСЯ К ИГРЕ" width="100%"></menu-button>
+      <menu-button title="СОЗДАТЬ ИГРУ" width="100%" @click="createGame" />
+      <menu-button title="ПОДКЛЮЧИТСЯ К ИГРЕ" width="100%" @click="joinGame" />
       <div class="share-panel">
-        <menu-button white title="ПОДЕЛИТЬСЯ" icon="share" width="100%"></menu-button>
-        <menu-button white icon="telegram"></menu-button>
-        <menu-button white icon="discord"></menu-button>
+        <menu-button white title="ПОДЕЛИТЬСЯ" icon="share" width="100%" />
+        <menu-button white icon="telegram" />
+        <menu-button white icon="discord" />
       </div>
     </div>
-    <div v-show="allCardsAreLoaded" class="background">
+    <div class="background">
       <div class="card-container left-card-1">
         <img src="@/assets/cards/main_screen_card_1.png" class="card" @load="markAsLoaded" />
       </div>
@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import MenuButton from './interfaces/MenuButton.vue'
+import router from '@/router'
 
 const allCardsAreLoaded = ref(false)
 const cardsCount = 6
@@ -46,10 +47,18 @@ function markAsLoaded() {
   loadedCards++
   allCardsAreLoaded.value = loadedCards === cardsCount
 }
+
+function createGame() {
+  router.push('create-game')
+}
+
+function joinGame() {
+  router.push('join-game')
+}
 </script>
 
 <style scoped>
-.content-container {
+.main-menu-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;

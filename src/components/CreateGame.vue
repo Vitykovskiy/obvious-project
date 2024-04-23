@@ -1,89 +1,104 @@
 <template>
-  <div class="settings-page">
-    <navigation-panel></navigation-panel>
-    <div class="setting">
-      <span>Максимум игроков</span>
-      <button @click="decrementPlayers">-</button>
-      <span>{{ maxPlayers }}</span>
-      <button @click="incrementPlayers">+</button>
+  <div class="content-container">
+    <navigation-panel title="Настройте игру" @onReturn="goToBack" />
+    <div class="settings-panel">
+      <div class="settings-row">
+        <span>Максимум игроков</span>
+        <div class="numberic-input">
+          <menu-button white icon="minus" @click="decreaseMaxPlayersCount" />
+          <span>{{ maxPlayersCount }}</span>
+          <menu-button white icon="plus" @click="increaseMaxPlayersCount" />
+        </div>
+      </div>
+      <div class="settings-row">
+        <span>Количество раундов</span>
+        <div class="numberic-input">
+          <menu-button white icon="minus" @click="decreaseRoundsCount" />
+          <span>{{ roundsCount }}</span>
+          <menu-button white icon="plus" @click="increaseRoundsCount" />
+        </div>
+      </div>
     </div>
-    <div class="setting">
-      <span>Количество раундов</span>
-      <button @click="decrementRounds">-</button>
-      <span>{{ numberOfRounds }}</span>
-      <button @click="incrementRounds">+</button>
+    <div class="confirm-buttons">
+      <menu-button title="СОЗДАТЬ" width="50%" @click="createGame" />
     </div>
-    <button class="create-button" @click="createGame">Создать</button>
   </div>
 </template>
 
 <script setup lang="ts">
+import router from '@/router'
+import MenuButton from './interfaces/MenuButton.vue'
+import NavigationPanel from './interfaces/NavigationPanel.vue'
 import { ref } from 'vue'
-import NavigationPanel from '@/components/interface/NavigationPanel.vue'
 
-const maxPlayers = ref(4)
-const numberOfRounds = ref(5)
+const maxPlayersCount = ref(2)
+const roundsCount = ref(1)
 
-const decrementPlayers = () => {
-  if (maxPlayers.value > 1) maxPlayers.value--
+function increaseMaxPlayersCount() {
+  if (maxPlayersCount.value === 8) return
+  maxPlayersCount.value++
 }
 
-const incrementPlayers = () => {
-  maxPlayers.value++
+function decreaseMaxPlayersCount() {
+  if (maxPlayersCount.value === 2) return
+  maxPlayersCount.value--
 }
 
-const decrementRounds = () => {
-  if (numberOfRounds.value > 1) numberOfRounds.value--
+function increaseRoundsCount() {
+  if (roundsCount.value === 50) return
+  roundsCount.value++
 }
 
-const incrementRounds = () => {
-  numberOfRounds.value++
+function decreaseRoundsCount() {
+  if (roundsCount.value === 1) return
+  roundsCount.value--
 }
 
-const createGame = () => {
-  // Здесь логика для создания игры с заданными настройками
-  console.log('Игра создана с игроками:', maxPlayers.value, 'и раундами:', numberOfRounds.value)
+function goToBack() {
+  router.go(-1)
+}
+
+function createGame() {
+  router.push('choose-deck')
 }
 </script>
 
 <style scoped>
-.settings-page {
+.settings-panel {
+  margin: 2em 0;
+  width: 80%;
+}
+
+.settings-row {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  margin: 2em 0;
+}
+
+.settings-row span {
+  font-weight: 500;
+  font-size: 2.5em;
+}
+
+.numberic-input {
+  display: flex;
   justify-content: center;
-  color: white;
-  padding: 20px;
-}
-
-.setting {
-  display: flex;
   align-items: center;
-  margin: 10px;
 }
 
-.setting button {
-  margin: 0 10px;
-  background-color: #4d5db2;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  color: white;
-  font-size: 24px;
+.numberic-input span {
+  width: 1em;
+  text-align: center;
+  font-weight: 800;
+  font-size: 3.3em;
+  margin: 0 0.5em;
 }
 
-.create-button {
-  background-color: #ffd700;
-  border: none;
-  color: #5e4db2;
-  padding: 15px 30px;
-  border-radius: 30px;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.create-button:hover {
-  background-color: #e0c200;
+.confirm-buttons {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  margin-top: 3em;
 }
 </style>

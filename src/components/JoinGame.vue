@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  <span>JOIN GAME</span>
 </template>
 
 <script setup lang="ts"></script>
