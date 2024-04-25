@@ -1,27 +1,23 @@
 <template>
-  <input
-    v-model="value"
-    :placeholder="props.placeholder"
-    :type="props.type"
-    :style="{ width: props.width }"
-  />
+  <input v-bind="$attrs" :value="modelValue" @input="onInput" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-interface Props {
-  placeholder: string
-  type: 'text' | 'number'
-  width: string
-}
-
-const value = ref('')
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: '',
-  type: 'text',
-  width: '100%'
+defineProps({
+  modelValue: {
+    type: String,
+    default: ''
+  }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+function onInput(event: Event) {
+  const target = event.target as HTMLInputElement | null
+  if (target) {
+    emit('update:modelValue', target.value)
+  }
+}
 </script>
 
 <style scoped>
@@ -38,17 +34,5 @@ input:focus {
   font-weight: 800;
   text-align: center;
   outline: none;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
 }
 </style>

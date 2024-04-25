@@ -1,5 +1,10 @@
 <template>
-  <button class="menu-button" :style="{ width: width }" :class="{ white: white, circle: !title }">
+  <button
+    class="menu-button"
+    :style="{ width: width }"
+    :class="{ white: white, circle: !title }"
+    :disabled
+  >
     <span v-if="title">{{ title }}</span>
     <img v-if="icon" class="button-icon" :src="iconPath" :alt="icon" />
   </button>
@@ -13,6 +18,7 @@ interface Props {
   width?: string
   icon?: string
   white?: boolean
+  disabled?: boolean
 }
 
 const props = defineProps<Props>()
@@ -46,6 +52,10 @@ const iconPath = computed(() => {
   transition: all 0.3s ease;
 }
 
+.menu-button:disabled {
+  opacity: 0.5;
+}
+
 .menu-button span {
   margin: 0 1em;
 }
@@ -66,7 +76,7 @@ const iconPath = computed(() => {
   border-radius: 50%;
 }
 
-.menu-button:active {
+.menu-button:active:enabled {
   box-shadow: none;
   transform: translateY(0.1em);
 }

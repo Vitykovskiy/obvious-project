@@ -1,8 +1,10 @@
 <template>
   <div class="content-container">
     <navigation-panel title="Подключение к комнате" @onReturn="goToBack" />
-    <input-field placeholder="Введите ID комнаты" type="number" />
-    <span>JOIN GAME</span>
+    <div class="join-game-form">
+      <input-field v-model="roomId" placeholder="Введите ID комнаты" />
+      <menu-button title="ПОДКЛЮЧИТЬСЯ" :disabled="false" @click="start(roomId)" />
+    </div>
     <background-cards />
   </div>
 </template>
@@ -12,10 +14,31 @@ import router from '@/router'
 import BackgroundCards from './interfaces/BackgroundCards.vue'
 import NavigationPanel from './interfaces/NavigationPanel.vue'
 import InputField from './interfaces/InputField.vue'
+import MenuButton from './interfaces/MenuButton.vue'
+import { ref } from 'vue'
+
+const roomId = ref('')
+
+function start(data: string) {
+  console.log('ПОДКЛЮЧИТЬСЯ', data)
+}
 
 function goToBack() {
   router.go(-1)
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+navigation-panel {
+  flex-grow: 0;
+}
+
+.join-game-form {
+  flex-grow: 1;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 70%;
+}
+</style>

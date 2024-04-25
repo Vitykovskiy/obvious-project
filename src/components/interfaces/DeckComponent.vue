@@ -38,6 +38,7 @@ defineProps({
   border-radius: 2vh;
   box-shadow: 0px 10px 20px 0px #00000052;
   transform-origin: 60% 85%;
+  pointer-events: none;
 }
 
 .card-back-container {

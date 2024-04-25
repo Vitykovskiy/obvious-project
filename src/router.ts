@@ -16,6 +16,10 @@ const routes = [
   {
     path: '/choose-deck',
     component: () => import('./components/ChooseDeck.vue')
+  },
+  {
+    path: '/avatar-presentation',
+    component: () => import('./components/AvatarPresentation.vue')
   }
 ]
 

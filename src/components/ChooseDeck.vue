@@ -4,7 +4,7 @@
     <div class="decks-container">
       <div v-for="deck in decks" :key="deck" class="deck">
         <deck-component :name="deck" />
-        <menu-button white title="Выбрать" />
+        <menu-button white title="Выбрать" @click="selectDeck(deck)" />
       </div>
     </div>
   </div>
@@ -18,6 +18,11 @@ import NavigationPanel from './interfaces/NavigationPanel.vue'
 import { ref } from 'vue'
 
 const decks = ref(['star-wars', 'star-wars', 'star-wars'])
+
+function selectDeck(deck: string) {
+  console.log('Selected deck:', deck)
+  router.push('avatar-presentation')
+}
 
 function goToBack() {
   router.go(-1)
