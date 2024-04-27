@@ -30,7 +30,7 @@ const userAvatar = ref({
 const userColor = ref('#d16fff')
 
 function goToNextScreen() {
-  console.log('goToNextScreen')
+  router.push('waiting-room')
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <navigation-panel title="Подключение к комнате" @onReturn="goToBack" />
+    <navigation-panel title="Подключение к комнате" :buttons="navigationButtons" />
     <div class="join-game-form">
       <input-field v-model="roomId" placeholder="Введите ID комнаты" />
       <menu-button title="ПОДКЛЮЧИТЬСЯ" :disabled="false" @click="start(roomId)" />
@@ -19,12 +19,15 @@ import { ref } from 'vue'
 
 const roomId = ref('')
 
+const navigationButtons = [
+  {
+    icon: 'return',
+    callback: () => router.go(-1)
+  }
+]
+
 function start(data: string) {
   console.log('ПОДКЛЮЧИТЬСЯ', data)
-}
-
-function goToBack() {
-  router.go(-1)
 }
 </script>
 

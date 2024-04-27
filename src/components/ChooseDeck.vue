@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <navigation-panel title="Выберите колоду" @onReturn="goToBack" />
+    <navigation-panel title="Выберите колоду" :buttons="navigationButtons" />
     <div class="decks-container">
       <div v-for="deck in decks" :key="deck" class="deck">
         <deck-component :name="deck" />
@@ -24,9 +24,12 @@ function selectDeck(deck: string) {
   router.push('avatar-presentation')
 }
 
-function goToBack() {
-  router.go(-1)
-}
+const navigationButtons = [
+  {
+    icon: 'return',
+    callback: () => router.go(-1)
+  }
+]
 </script>
 
 <style scoped>

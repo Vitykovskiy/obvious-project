@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <navigation-panel title="Настройте игру" @onReturn="goToBack" />
+    <navigation-panel title="Настройте игру" :buttons="navigationButtons" />
     <div class="settings-panel">
       <div class="settings-row">
         <span>Максимум игроков</span>
@@ -54,9 +54,12 @@ function decreaseRoundsCount() {
   roundsCount.value--
 }
 
-function goToBack() {
-  router.go(-1)
-}
+const navigationButtons = [
+  {
+    icon: 'return',
+    callback: () => router.go(-1)
+  }
+]
 
 function createGame() {
   router.push('choose-deck')

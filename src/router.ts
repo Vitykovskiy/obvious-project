@@ -20,6 +20,14 @@ const routes = [
   {
     path: '/avatar-presentation',
     component: () => import('./components/AvatarPresentation.vue')
+  },
+  {
+    path: '/waiting-room',
+    component: () => import('./components/WaitingRoom.vue')
+  },
+  {
+    path: '/game-room',
+    component: () => import('./components/GameRoom.vue')
   }
 ]
 
