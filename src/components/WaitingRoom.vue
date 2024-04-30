@@ -6,6 +6,7 @@
     </div>
     <div class="players-container">
       <player-avatar
+        class="player-avatar"
         v-for="(player, index) in players"
         :key="index"
         :isPlayerReady="player.isPlayerReady"
@@ -43,44 +44,44 @@
 <script setup lang="ts">
 import NavigationPanel, { type PanelButton } from './interfaces/NavigationPanel.vue'
 import MenuButton from './interfaces/MenuButton.vue'
-import PlayerAvatar, { type PlayerInfo } from './interfaces/PlayerAvatar.vue'
+import PlayerAvatar, { type Props } from './interfaces/PlayerAvatar.vue'
 import { ref } from 'vue'
 import router from '@/router'
 
-const players: PlayerInfo[] = [
+const players = [
   {
     isPlayerReady: true,
-    playerColor: '#D16FFF',
+    playerColor: { main: '#D16FFF', additional: '#B14BE1' },
     playerAvatar: '/src/assets/avatars/lama.svg',
     playerScore: 0
   },
   {
     isPlayerReady: true,
-    playerColor: '#91CEE2',
+    playerColor: { main: '#91CEE2', additional: '#64ABC2' },
     playerAvatar: '/src/assets/avatars/sloth.svg',
     playerScore: 0
   },
   {
     isPlayerReady: false,
-    playerColor: '#3A73E3',
+    playerColor: { main: '#3A73E3', additional: '#3A73E3' },
     playerAvatar: '/src/assets/avatars/frog.svg',
     playerScore: 0
   },
   {
     isPlayerReady: false,
-    playerColor: '#D34444',
+    playerColor: { main: '#D34444', additional: '#B21C25' },
     playerAvatar: '/src/assets/avatars/zebra.svg',
     playerScore: 0
   },
   {
     isPlayerReady: true,
-    playerColor: '#56B79C',
+    playerColor: { main: '#56B79C', additional: '#3C997F' },
     playerAvatar: '/src/assets/avatars/elephant.svg',
     playerScore: 0
   },
   {
     isPlayerReady: false,
-    playerColor: '#F19648',
+    playerColor: { main: '#F19648', additional: '#D27A2E' },
     playerAvatar: '/src/assets/avatars/cougar.svg',
     playerScore: 0
   },
@@ -140,6 +141,10 @@ function onInvite() {
   flex-grow: 1;
   justify-content: space-around;
   align-items: center;
+}
+
+.player-avatar {
+  margin: 1em;
 }
 
 .buttons-panel {

@@ -1,10 +1,5 @@
 <template>
-  <button
-    class="menu-button"
-    :style="{ width: width }"
-    :class="{ white: white, circle: !title }"
-    :disabled
-  >
+  <button class="menu-button" :style="{ width: width }" :class="{ white: white }" :disabled>
     <span v-if="title">{{ title }}</span>
     <img v-if="icon" class="button-icon" :src="iconPath" :alt="icon" />
   </button>
@@ -17,6 +12,7 @@ interface Props {
   title?: string
   width?: string
   icon?: string
+  circle?: boolean
   white?: boolean
   disabled?: boolean
 }

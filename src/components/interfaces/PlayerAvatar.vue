@@ -1,44 +1,62 @@
 <template>
   <div class="container">
-    <div class="avatar-container" :class="{ 'not-connected': !props.playerAvatar }">
+    <div
+      class="avatar-container"
+      :class="{ 'not-connected': !props.playerAvatar }"
+      :style="{ backgroundColor: props?.playerColor?.main }"
+    >
       <img
         v-if="props.playerAvatar"
-        class="avatar"
         :src="props.playerAvatar"
-        :style="{ backgroundColor: props.playerColor }"
+        class="avatar"
+        :class="{ waiting: props.waitForPlayerTurn }"
+        :style="{ opacity: props.waitForPlayerTurn ? '0.2' : '1' }"
+      />
+      <img
+        v-if="props.waitForPlayerTurn && props.playerAvatar"
+        class="waiter"
+        src="/src/assets/icons/loader.png"
       />
     </div>
-    <div
-      v-if="props.showReadyState"
-      class="ready-status"
-      :class="{ 'not-ready': !props.isPlayerReady }"
-    >
-      <img src="/src/assets/icons/check.png" />
+    <div v-if="props.playerAvatar" class="right-info-container">
+      <div
+        v-if="props.showReadyState"
+        class="ready-state"
+        :class="{ 'not-ready': !props.isPlayerReady }"
+        :style="{ backgroundColor: props?.playerColor?.additional }"
+      >
+        <img src="/src/assets/icons/check.png" />
+      </div>
+      <div
+        v-if="props.showScore"
+        class="score-container"
+        :style="{ backgroundColor: props?.playerColor?.additional }"
+      >
+        <span> {{ props.playerScore }} </span>
+      </div>
     </div>
-    <span v-if="props.showScore" class="user-score"> {{ props.playerScore }} </span>
   </div>
 </template>
 
 <script setup lang="ts">
-export type PlayerInfo = {
-  playerColor?: string
+export type Props = {
+  isPlayerReady?: boolean
+  playerColor?: PlayerColor
   playerAvatar?: string
   playerScore?: number
-  isPlayerReady?: boolean
-}
-
-type InfoStates = {
   showScore?: boolean
   showReadyState?: boolean
+  waitForPlayerTurn?: boolean
+  small?: boolean
 }
 
-const props = withDefaults(defineProps<PlayerInfo | InfoStates>(), {
-  isPlayerReady: false,
-  playerColor: '',
-  playerAvatar: '',
-  playerScore: 0,
-  showScore: false,
-  showReadyState: false
+export type PlayerColor = {
+  main: string
+  additional: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  playerScore: 0
 })
 </script>
 
@@ -46,52 +64,65 @@ const props = withDefaults(defineProps<PlayerInfo | InfoStates>(), {
 .container {
   width: 9em;
   height: 9em;
-  margin: 1em;
   border-radius: 50%;
   pointer-events: none;
   position: relative;
 }
 
 .avatar-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
   width: 100%;
   height: 100%;
   border-radius: 50%;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.avatar {
+.avatar,
+.waiter {
   width: 100%;
   height: 100%;
+}
+
+.waiter {
+  position: absolute;
 }
 
 .not-connected {
   border: 0.35em solid #ffffff5d;
 }
 
-.ready-status {
+.right-info-container {
   position: absolute;
+  overflow: hidden;
   width: 40%;
   height: 40%;
   bottom: -13%;
   right: -13%;
+}
 
+.ready-state,
+.score-container {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 0.35em solid #ffffff;
-  background-color: #ffffff4d;
+}
+
+.score-container span {
+  font-weight: 700;
+  font-size: 1.5em;
 }
 
 .not-ready {
   opacity: 0.3;
 }
 
-.ready-status img {
+.ready-state img {
   margin-top: 0.5em;
   width: 2em;
   height: 2em;

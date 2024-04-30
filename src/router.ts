@@ -28,6 +28,18 @@ const routes = [
   {
     path: '/game-room',
     component: () => import('./components/GameRoom.vue')
+  },
+  {
+    path: '/round-result',
+    component: () => import('./components/RoundResult.vue')
+  },
+  {
+    path: '/rate-screen',
+    component: () => import('./components/RateScreen.vue')
+  },
+  {
+    path: '/game-results',
+    component: () => import('./components/GameResults.vue')
   }
 ]
 

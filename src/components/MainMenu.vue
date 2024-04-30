@@ -7,8 +7,8 @@
       <menu-button title="ПОДКЛЮЧИТСЯ К ИГРЕ" width="100%" @click="joinGame" />
       <div class="share-panel">
         <menu-button white title="ПОДЕЛИТЬСЯ" icon="share" width="100%" />
-        <menu-button white icon="telegram" />
-        <menu-button white icon="discord" />
+        <menu-button white circle icon="telegram" />
+        <menu-button white circle icon="discord" />
       </div>
     </div>
     <background-cards />

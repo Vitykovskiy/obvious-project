@@ -1,11 +1,14 @@
 <template>
   <div class="header-panel">
-    <span class="title">{{ title }}</span>
+    <div id="title-container" class="title-container">
+      <span class="title">{{ title }}</span>
+    </div>
     <div class="buttons-container">
       <menu-button
         v-for="(button, index) in buttons"
         :key="index"
         white
+        circle
         :icon="button.icon"
         @click="button.callback"
       />
@@ -24,17 +27,22 @@ export type PanelButton = {
 
 withDefaults(
   defineProps<{
-    title: string
+    title?: string
     buttons: PanelButton[]
   }>(),
   {
-    title: '',
     buttons: () => []
   }
 )
 </script>
 
 <style scoped>
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
 .header-panel {
   width: 100%;
   display: flex;

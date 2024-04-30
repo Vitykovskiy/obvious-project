@@ -13,9 +13,9 @@
       <div class="settings-row">
         <span>Количество раундов</span>
         <div class="numberic-input">
-          <menu-button white icon="minus" @click="decreaseRoundsCount" />
+          <menu-button white circle icon="minus" @click="decreaseRoundsCount" />
           <span>{{ roundsCount }}</span>
-          <menu-button white icon="plus" @click="increaseRoundsCount" />
+          <menu-button white circle icon="plus" @click="increaseRoundsCount" />
         </div>
       </div>
     </div>
