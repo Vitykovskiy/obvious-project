@@ -1,20 +1,13 @@
 <template>
   <div class="content-container">
     <navigation-panel title="Комната ожидания игроков" :buttons="navigationButtons" />
-    <div class="info-container">
+    <div v-if="isUserOwner" class="info-container">
       Колода карт: <span class="underlined">"{{ deckName }}"</span>
     </div>
     <div class="players-container">
-      <player-avatar
-        class="player-avatar"
-        v-for="(player, index) in players"
-        :key="index"
-        :isPlayerReady="player.isPlayerReady"
-        :playerColor="player.playerColor"
-        :playerAvatar="player.playerAvatar"
-        :playerScore="player.playerScore"
-        :showReadyState="!!player.playerAvatar"
-      />
+      <template v-for="playerNum in playersSlots" :key="playerNum">
+        <player-avatar class="player-avatar" showReadyState :player="players[playerNum - 1]" />
+      </template>
     </div>
     <div class="info-container">ID комнаты</div>
     <div class="buttons-panel">
@@ -34,7 +27,7 @@
           v-else
           :white="isUserReady"
           :title="isUserReady ? 'НЕ ГОТОВ' : 'ГОТОВ'"
-          @click="onPlayerReady"
+          @click="changeReadyStatus"
         />
       </div>
     </div>
@@ -44,72 +37,62 @@
 <script setup lang="ts">
 import NavigationPanel, { type PanelButton } from './interfaces/NavigationPanel.vue'
 import MenuButton from './interfaces/MenuButton.vue'
-import PlayerAvatar, { type Props } from './interfaces/PlayerAvatar.vue'
-import { ref } from 'vue'
+import PlayerAvatar from './interfaces/PlayerAvatar.vue'
+import { computed, ref } from 'vue'
 import router from '@/router'
+import { useStore } from 'vuex'
+import type { Player, PlayerInfo } from '@/services/interfaces'
+import { colors } from '@/services/constants'
 
-const players = [
-  {
-    isPlayerReady: true,
-    playerColor: { main: '#D16FFF', additional: '#B14BE1' },
-    playerAvatar: '/src/assets/avatars/lama.svg',
-    playerScore: 0
-  },
-  {
-    isPlayerReady: true,
-    playerColor: { main: '#91CEE2', additional: '#64ABC2' },
-    playerAvatar: '/src/assets/avatars/sloth.svg',
-    playerScore: 0
-  },
-  {
-    isPlayerReady: false,
-    playerColor: { main: '#3A73E3', additional: '#3A73E3' },
-    playerAvatar: '/src/assets/avatars/frog.svg',
-    playerScore: 0
-  },
-  {
-    isPlayerReady: false,
-    playerColor: { main: '#D34444', additional: '#B21C25' },
-    playerAvatar: '/src/assets/avatars/zebra.svg',
-    playerScore: 0
-  },
-  {
-    isPlayerReady: true,
-    playerColor: { main: '#56B79C', additional: '#3C997F' },
-    playerAvatar: '/src/assets/avatars/elephant.svg',
-    playerScore: 0
-  },
-  {
-    isPlayerReady: false,
-    playerColor: { main: '#F19648', additional: '#D27A2E' },
-    playerAvatar: '/src/assets/avatars/cougar.svg',
-    playerScore: 0
-  },
-  {}
-]
+const store = useStore()
+const isUserOwner = computed(() => store.state.game.isUserGameOwner)
+const isGameReady = computed(() => store.state.game.isReadyToPlay)
 
-const isUserReady = ref(false)
-const isUserOwner = ref(true)
-const isGameReady = ref(true)
-const deckName = ref('star-wars')
-const roomId = ref('2890 - 3287')
+const isUserReady = computed(() => store.state.game.player.status === 'RD')
 
-const navigationButtons: PanelButton[] = [
+const deckName = computed(() =>
+  store.state.game.isUserGameOwner ? store.state.game.deck?.name : ''
+)
+const roomId = computed(() => {
+  const gameId = store.state.game.game.id
+  if (gameId) {
+    return gameId.toString()
+  }
+  throw new Error('Game was not created')
+})
+
+const players = computed<PlayerInfo[]>(() => {
+  const playersList = store.state.game.playersList
+  return playersList.map((player: Player, index: number) => {
+    return {
+      avatar: player.avatar,
+      color: colors[index],
+      isReady: player.status === 'RD',
+      score: player.points
+    }
+  })
+})
+
+const playersSlots = computed<number>(() => store.state.game.game?.members_num ?? players.length)
+const buttons: PanelButton[] = [
   {
     icon: 'log-out',
     callback: () => console.log('log-out')
   }
 ]
+const navigationButtons = computed<PanelButton[]>(() => {
+  const baseButtons = [...buttons]
+  if (isUserOwner.value) {
+    baseButtons.push({
+      icon: 'information',
+      callback: () => console.log('information')
+    })
+  }
+  return baseButtons
+})
 
-if (isUserOwner.value) {
-  navigationButtons.push({
-    icon: 'information',
-    callback: () => console.log('information')
-  })
-}
-
-function onPlayerReady() {
-  isUserReady.value = !isUserReady.value
+function changeReadyStatus() {
+  store.dispatch('game/changePlayerReadyStatus')
 }
 
 function onStartGame() {

@@ -2,8 +2,8 @@
   <div class="content-container">
     <navigation-panel title="Выберите колоду" :buttons="navigationButtons" />
     <div class="decks-container">
-      <div v-for="deck in decks" :key="deck" class="deck">
-        <deck-component :name="deck" />
+      <div v-for="deck in decks" :key="deck.id" class="deck">
+        <deck-component :name="deck.name" />
         <menu-button white title="Выбрать" @click="selectDeck(deck)" />
       </div>
     </div>
@@ -15,13 +15,21 @@ import router from '@/router'
 import MenuButton from './interfaces/MenuButton.vue'
 import DeckComponent from './interfaces/DeckComponent.vue'
 import NavigationPanel from './interfaces/NavigationPanel.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useStore } from 'vuex'
+import type { Deck } from '@/services/interfaces'
 
-const decks = ref(['star-wars', 'star-wars', 'star-wars'])
+const decks = ref<Deck[]>([])
+const store = useStore()
 
-function selectDeck(deck: string) {
-  console.log('Selected deck:', deck)
-  router.push('avatar-presentation')
+onMounted(async () => {
+  await store.dispatch('game/getDecks')
+  decks.value = store.state.game.deckList
+})
+
+function selectDeck(deck: Deck) {
+  store.commit('game/SET_DECK', deck)
+  router.push('game-settings')
 }
 
 const navigationButtons = [

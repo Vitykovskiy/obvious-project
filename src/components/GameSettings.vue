@@ -13,9 +13,9 @@
       <div class="settings-row">
         <span>Количество раундов</span>
         <div class="numberic-input">
-          <menu-button white circle icon="minus" @click="decreaseRoundsCount" />
-          <span>{{ roundsCount }}</span>
-          <menu-button white circle icon="plus" @click="increaseRoundsCount" />
+          <menu-button white circle icon="minus" @click="decreasePointsToWinCount" />
+          <span>{{ pointsToWin }}</span>
+          <menu-button white circle icon="plus" @click="increasePointsToWinCount" />
         </div>
       </div>
     </div>
@@ -30,28 +30,38 @@ import router from '@/router'
 import MenuButton from './interfaces/MenuButton.vue'
 import NavigationPanel from './interfaces/NavigationPanel.vue'
 import { ref } from 'vue'
+import { useStore } from 'vuex'
+import {
+  DEFAULT_PLAYERS_COUNT,
+  DEFAULT_POINTS_TO_WIN,
+  MAX_PLAYERS,
+  MAX_POINTS_TO_WIN,
+  MIN_PLAYERS,
+  MIN_POINTS_TO_WIN
+} from '@/services/constants'
 
-const maxPlayersCount = ref(2)
-const roundsCount = ref(1)
+const maxPlayersCount = ref(DEFAULT_PLAYERS_COUNT)
+const pointsToWin = ref(DEFAULT_POINTS_TO_WIN)
+const store = useStore()
 
 function increaseMaxPlayersCount() {
-  if (maxPlayersCount.value === 8) return
+  if (maxPlayersCount.value === MAX_PLAYERS) return
   maxPlayersCount.value++
 }
 
 function decreaseMaxPlayersCount() {
-  if (maxPlayersCount.value === 2) return
+  if (maxPlayersCount.value === MIN_PLAYERS) return
   maxPlayersCount.value--
 }
 
-function increaseRoundsCount() {
-  if (roundsCount.value === 50) return
-  roundsCount.value++
+function increasePointsToWinCount() {
+  if (pointsToWin.value === MAX_POINTS_TO_WIN) return
+  pointsToWin.value++
 }
 
-function decreaseRoundsCount() {
-  if (roundsCount.value === 1) return
-  roundsCount.value--
+function decreasePointsToWinCount() {
+  if (pointsToWin.value === MIN_POINTS_TO_WIN) return
+  pointsToWin.value--
 }
 
 const navigationButtons = [
@@ -61,8 +71,22 @@ const navigationButtons = [
   }
 ]
 
-function createGame() {
-  router.push('choose-deck')
+async function createGame() {
+  try {
+    store.commit('game/SET_IS_USER_GAME_OWNER', true)
+    await store.dispatch('game/createPlayer', { avatar: 'lama' })
+    await store.dispatch('game/createGame', {
+      creator: store.state.game.player.id,
+      deck: store.state.game.deck.id,
+      members_num: maxPlayersCount.value,
+      points_to_win: pointsToWin.value
+    })
+    await store.dispatch('game/connect')
+
+    router.push('avatar-presentation')
+  } catch (err) {
+    console.log('Game not created:', err)
+  }
 }
 </script>
 
@@ -105,3 +129,8 @@ function createGame() {
   margin-top: 3em;
 }
 </style>
+import { DEFAULT_PLAYERS_COUNT, DEFAULT_POINTS_TO_WIN, MAX_PLAYERS, MIN_PLAYERS, MAX_POINTS_TO_WIN,
+MIN_POINTS_TO_WIN } from '@/services/constants' import { DEFAULT_PLAYERS_COUNT,
+DEFAULT_POINTS_TO_WIN, MAX_PLAYERS, MIN_PLAYERS, MAX_POINTS_TO_WIN, MIN_POINTS_TO_WIN } from
+'@/services/constants', DEFAULT_POINTS_TO_WIN, MAX_PLAYERS, MAX_POINTS_TO_WIN, MIN_PLAYERS,
+MIN_POINTS_TO_WIN

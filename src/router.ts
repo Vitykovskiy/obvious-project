@@ -6,16 +6,16 @@ const routes = [
     component: () => import('./components/MainMenu.vue')
   },
   {
-    path: '/create-game',
-    component: () => import('./components/CreateGame.vue')
+    path: '/game-settings',
+    component: () => import('./components/GameSettings.vue')
   },
   {
     path: '/join-game',
     component: () => import('./components/JoinGame.vue')
   },
   {
-    path: '/choose-deck',
-    component: () => import('./components/ChooseDeck.vue')
+    path: '/select-deck',
+    component: () => import('./components/SelectDeck.vue')
   },
   {
     path: '/avatar-presentation',

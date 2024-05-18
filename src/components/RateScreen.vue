@@ -3,56 +3,36 @@
     <div class="title">
       <h2>Помогите нам стать лучше</h2>
     </div>
-    <div class="rate-row">
+    <div class="rate-row" v-for="(item, index) in ratings" :key="index">
       <div class="row-title">
-        <p>Визуальная часть игры</p>
+        <p>{{ item.title }}</p>
       </div>
       <div class="stars-container">
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50"></star-icon>
-      </div>
-    </div>
-    <div class="rate-row">
-      <div class="row-title">
-        <p>Геймплей и понятность</p>
-      </div>
-      <div class="stars-container">
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-      </div>
-    </div>
-    <div class="rate-row">
-      <div class="row-title">
-        <p>Вероятность рекомендации</p>
-      </div>
-      <div class="stars-container">
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
-        <star-icon width="50" height="50" gold></star-icon>
+        <star-icon
+          v-for="n in 5"
+          :key="n"
+          :gold="n <= item.rating"
+          width="50"
+          height="50"
+        ></star-icon>
       </div>
     </div>
     <div class="buttons-container">
-      <menu-button
-        class="menu-button"
-        title="К РЕЗУЛЬТАТАМ ИГРЫ"
-        @click="toGameResults"
-      ></menu-button>
+      <menu-button class="menu-button" title="К РЕЗУЛЬТАМАМ ИГРЫ"></menu-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import StarIcon from './interfaces/svg-icons/StarIcon.vue'
+import StarIcon from './interfaces/StarIcon.vue'
 import MenuButton from './interfaces/MenuButton.vue'
 import router from '@/router'
+
+const ratings = [
+  { title: 'Визуальная часть игры', rating: 4 },
+  { title: 'Геймплей и понятность', rating: 5 },
+  { title: 'Вероятность рекомендации', rating: 5 }
+]
 
 function toGameResults() {
   router.push('game-results')
@@ -104,3 +84,4 @@ h2 {
   padding: 0.7em 1.5em;
 }
 </style>
+./interfaces/StarIcon.vue

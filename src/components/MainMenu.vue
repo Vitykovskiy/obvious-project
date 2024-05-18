@@ -21,7 +21,7 @@ import BackgroundCards from './interfaces/BackgroundCards.vue'
 import router from '@/router'
 
 function createGame() {
-  router.push('create-game')
+  router.push('select-deck')
 }
 
 function joinGame() {

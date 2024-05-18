@@ -3,7 +3,7 @@
     <navigation-panel title="Подключение к комнате" :buttons="navigationButtons" />
     <div class="join-game-form">
       <input-field v-model="roomId" placeholder="Введите ID комнаты" />
-      <menu-button title="ПОДКЛЮЧИТЬСЯ" :disabled="false" @click="start(roomId)" />
+      <menu-button title="ПОДКЛЮЧИТЬСЯ" :disabled @click="start" />
     </div>
     <background-cards />
   </div>
@@ -15,10 +15,12 @@ import BackgroundCards from './interfaces/BackgroundCards.vue'
 import NavigationPanel from './interfaces/NavigationPanel.vue'
 import InputField from './interfaces/InputField.vue'
 import MenuButton from './interfaces/MenuButton.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const roomId = ref('')
-
+const disabled = computed(() => !roomId.value)
 const navigationButtons = [
   {
     icon: 'return',
@@ -26,8 +28,15 @@ const navigationButtons = [
   }
 ]
 
-function start(data: string) {
-  console.log('ПОДКЛЮЧИТЬСЯ', data)
+async function start(): Promise<void> {
+  try {
+    store.commit('game/SET_IS_USER_GAME_OWNER', false)
+    await store.dispatch('game/createPlayer', { avatar: 'lama', game: roomId.value })
+    await store.dispatch('game/connect')
+    router.push('avatar-presentation')
+  } catch (err) {
+    console.log('Game not created:', err)
+  }
 }
 </script>
 

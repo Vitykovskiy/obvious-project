@@ -14,8 +14,8 @@ import { computed } from 'vue'
 type CardProps = {
   deck: string
   card?: string
-  width: string
-  height: string
+  width?: string
+  height?: string
   shaded?: boolean
   closed?: boolean
   isCardOnTable?: boolean

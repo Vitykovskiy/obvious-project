@@ -1,62 +1,50 @@
 <template>
-  <div class="container">
-    <div
-      class="avatar-container"
-      :class="{ 'not-connected': !props.playerAvatar }"
-      :style="{ backgroundColor: props?.playerColor?.main }"
-    >
-      <img
-        v-if="props.playerAvatar"
-        :src="props.playerAvatar"
-        class="avatar"
-        :class="{ waiting: props.waitForPlayerTurn }"
-        :style="{ opacity: props.waitForPlayerTurn ? '0.2' : '1' }"
-      />
-      <img
-        v-if="props.waitForPlayerTurn && props.playerAvatar"
-        class="waiter"
-        src="/src/assets/icons/loader.png"
-      />
-    </div>
-    <div v-if="props.playerAvatar" class="right-info-container">
-      <div
-        v-if="props.showReadyState"
-        class="ready-state"
-        :class="{ 'not-ready': !props.isPlayerReady }"
-        :style="{ backgroundColor: props?.playerColor?.additional }"
-      >
-        <img src="/src/assets/icons/check.png" />
+  <div class="container" :class="{ 'not-connected': !props.player }">
+    <template v-if="props.player">
+      <div class="avatar-container" :style="{ backgroundColor: props.player.color.main }">
+        <img
+          :src="playerAvatarUrl"
+          :class="[{ waiting: props.waitForPlayerTurn }, 'avatar']"
+          :style="{ opacity: props.waitForPlayerTurn ? '0.2' : '1' }"
+        />
+        <img v-if="props.waitForPlayerTurn" class="waiter" src="/src/assets/icons/loader.png" />
       </div>
-      <div
-        v-if="props.showScore"
-        class="score-container"
-        :style="{ backgroundColor: props?.playerColor?.additional }"
-      >
-        <span> {{ props.playerScore }} </span>
+      <div class="right-info-container">
+        <div
+          v-if="props.showReadyState"
+          :class="[{ 'not-ready': !props.player.isReady }, 'ready-state']"
+          :style="{ backgroundColor: props.player.color.additional }"
+        >
+          <img src="/src/assets/icons/check.png" />
+        </div>
+        <div
+          v-if="props.showScore"
+          class="score-container"
+          :style="{ backgroundColor: props.player?.color?.additional }"
+        >
+          <span> {{ props.player.score }} </span>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-export type Props = {
-  isPlayerReady?: boolean
-  playerColor?: PlayerColor
-  playerAvatar?: string
-  playerScore?: number
+import type { PlayerInfo } from '@/services/interfaces'
+import { computed } from 'vue'
+
+type Props = {
+  player?: PlayerInfo
   showScore?: boolean
   showReadyState?: boolean
   waitForPlayerTurn?: boolean
   small?: boolean
 }
 
-export type PlayerColor = {
-  main: string
-  additional: string
-}
+const props = defineProps<Props>()
 
-const props = withDefaults(defineProps<Props>(), {
-  playerScore: 0
+const playerAvatarUrl = computed<string>(() => {
+  return props.player?.avatar ? `/src/assets/avatars/${props.player.avatar}.svg` : ''
 })
 </script>
 

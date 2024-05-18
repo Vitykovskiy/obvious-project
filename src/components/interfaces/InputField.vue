@@ -1,23 +1,9 @@
 <template>
-  <input v-bind="$attrs" :value="modelValue" @input="onInput" />
+  <input v-bind="$attrs" v-model="model" />
 </template>
 
 <script setup lang="ts">
-defineProps({
-  modelValue: {
-    type: String,
-    default: ''
-  }
-})
-
-const emit = defineEmits(['update:modelValue'])
-
-function onInput(event: Event) {
-  const target = event.target as HTMLInputElement | null
-  if (target) {
-    emit('update:modelValue', target.value)
-  }
-}
+const model = defineModel()
 </script>
 
 <style scoped>
